@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 public class Retro_logic extends JPanel {
     //initial class called to set up variables
     public Retro_logic(){
-        levelup = false;
         reset = false;
         start = false;
         left = false;
@@ -31,6 +30,7 @@ public class Retro_logic extends JPanel {
         changecolorsec = 1;
         bombspawnsec = 1;
         score = 0;
+        levelscore = 0;
         spikemove = 6;
         jumpsec = 0;
         jumppos = 0;
@@ -86,7 +86,6 @@ public class Retro_logic extends JPanel {
     //graphics public void
     public void paintComponent(Graphics g) {
         if (reset){
-            levelup = false;
             start = false;
             left = false;
             right = false;
@@ -106,6 +105,7 @@ public class Retro_logic extends JPanel {
             changecolorsec = 1;
             bombspawnsec = 1;
             score = 0;
+            levelscore = 0;
             spikemove = 6;
             jumpsec = 0;
             jumppos = 0;
@@ -189,6 +189,7 @@ public class Retro_logic extends JPanel {
                     bulshowarray[buli] = false;
                     bombsshowarray[bombi] = false;
                     score++;
+                    levelscore++;
                 }
             }
         }
@@ -439,6 +440,7 @@ public class Retro_logic extends JPanel {
                     for (int i = 0; i<55; i++){
                         if (bombsshowarray[i]){
                             score++;
+                            levelscore++;
                         }
                         bombsshowarray[i]=false;
                         bombsxposarray[i] = -50;
@@ -451,13 +453,10 @@ public class Retro_logic extends JPanel {
                 }
                 empusesec++;
             }
-            if (score%75==0 && !levelup && score!=0 && bombspawnlev<10){
+            if (levelscore>=75 && score!=0 && bombspawnlev<10){
                 bombspawnlev++;
                 empbarfillspeed++;
-                levelup=true;
-            }
-            if (score%75!=0 && levelup){
-                levelup=false;
+                levelscore-=75;
             }
         }
         
@@ -474,6 +473,7 @@ public class Retro_logic extends JPanel {
     }
     //initializing variables
     int score;
+    int levelscore;
     int charxpos;
     int charypos;
     int bulspawnsec;
@@ -508,5 +508,4 @@ public class Retro_logic extends JPanel {
     boolean empactivate;
     boolean gameover;
     boolean reset;
-    boolean levelup;
 }
