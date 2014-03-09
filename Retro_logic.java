@@ -146,9 +146,6 @@ public class Retro_logic extends JPanel {
         String livestr = String.format("%s", lives);
         g.drawString("Score: ",20, 464);
         g.drawString(scorestr, 64, 464);
-        String levstr = String.format("%s", empbarfillspeed);
-        g.drawString("Level ",90, 464);
-        g.drawString(levstr, 130, 464);
         g.drawString("Lives: ",500, 464);
         g.drawString(livestr, 544, 464);
         g.drawString("EMP Bar:", 220, 464);
@@ -198,12 +195,14 @@ public class Retro_logic extends JPanel {
         float bcheck2 = spikeypos[0]-((30/17)*spikexpos[2]);
         float charxposfloat = charxpos;
         float charyposfloat = charypos;
-        if ((charyposfloat+30>=(-30/17)*(charxposfloat+30)+bcheck1 && charyposfloat+30>=(30/17)*(charxposfloat+30)+bcheck2)|| (charyposfloat+30>=(-30/17)*charxposfloat+bcheck1 && charyposfloat+30>=(30/17)*charxposfloat+bcheck2)){
-            lives--;
-            spikeshow = false;
-            spikexpos[0]=-44;
-            spikexpos[1]=-47;
-            spikexpos[2]=-10;
+        if (!empactivate){
+            if ((charyposfloat+30>=(-30/17)*(charxposfloat+30)+bcheck1 && charyposfloat+30>=(30/17)*(charxposfloat+30)+bcheck2)|| (charyposfloat+30>=(-30/17)*charxposfloat+bcheck1 && charyposfloat+30>=(30/17)*charxposfloat+bcheck2)){
+                lives--;
+                spikeshow = false;
+                spikexpos[0]=-44;
+                spikexpos[1]=-47;
+                spikexpos[2]=-10;
+            }
         }
         
         //draw and animate bombs and check if any bombs hit bottom
@@ -216,7 +215,7 @@ public class Retro_logic extends JPanel {
                 if (start && !empactivate){
                     bombsyposarray[i]+=1;
                 }
-                if (bombsyposarray[i]>420){
+                if (bombsyposarray[i]>420 && !empactivate){
                     bombsshowarray[i] = false;
                     lives--;
                 }
@@ -403,7 +402,7 @@ public class Retro_logic extends JPanel {
             
             //if emp not loaded, load it
             if (!emp){
-                empbar += (float) (0.1/empbarfillspeed);
+                empbar += (float) (0.1-(.009*empbarfillspeed));
             }
             
             if (empbar>=100){
@@ -449,7 +448,7 @@ public class Retro_logic extends JPanel {
                 }
                 empusesec++;
             }
-            if (score%75==0 && !levelup && score!=0){
+            if (score%75==0 && !levelup && score!=0 && bombspawnlev<10){
                 bombspawnlev++;
                 empbarfillspeed++;
                 levelup=true;
