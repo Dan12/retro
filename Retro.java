@@ -26,7 +26,7 @@ public class Retro extends JFrame implements KeyListener{
         Retro retro = new Retro();
         retro.setSize(600, 500);
         retro.setDefaultCloseOperation(3);
-        retro.setLocation(500, 200);
+        retro.setLocation(100, 100);
         retro.setVisible(true);
         retro.setBackground(Color.WHITE);
         //set filepath

@@ -36,7 +36,7 @@ public class Retro_logic extends JPanel {
         jumppos = 0;
         lives = 3;
         bombspawnlev = 0;
-        empbarfillspeed = 1;
+        empbarfillspeed = 0;
         
         bombsshowarray = new boolean[55];
         for (int i = 0; i<55;i++){
@@ -86,6 +86,7 @@ public class Retro_logic extends JPanel {
     //graphics public void
     public void paintComponent(Graphics g) {
         if (reset){
+            levelup = false;
             start = false;
             left = false;
             right = false;
@@ -109,6 +110,8 @@ public class Retro_logic extends JPanel {
             jumpsec = 0;
             jumppos = 0;
             lives = 3;
+            bombspawnlev = 0;
+            empbarfillspeed = 0;
             bombsshowarray = new boolean[55];
             for (int i = 0; i<55;i++){bombsshowarray[i] = false;}
             bulshowarray = new boolean[20];
@@ -387,7 +390,7 @@ public class Retro_logic extends JPanel {
             }
                
             //if space is pressed, jump
-            if (spacepress){
+            if (spacepress && !empactivate){
                 jumppos = (float) ((12*jumpsec)-(.6*jumpsec*jumpsec));
                 charypos= 410-((int) Math.round(jumppos));
                 jumpsec++;
