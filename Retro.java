@@ -6,11 +6,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Retro extends JFrame implements KeyListener{
-
+    private static String play_check = "";
+    
     public Retro() {
         super("Retro");
         panel = new Retro_logic();
@@ -26,7 +29,25 @@ public class Retro extends JFrame implements KeyListener{
         retro.setLocation(500, 200);
         retro.setVisible(true);
         retro.setBackground(Color.WHITE);
-        JOptionPane.showMessageDialog(null, "How To Play:\nUse The Arrow Keys To Move\nPress Space To Jump\nWhen EMP Bar Is Full, Press The Up Arrow Key To Clear The Field\nShoot Down The Bombs Before They Land To Get Points\nAvoid The Spikes\nPress The 'P' Button To Pause\nGood Luck" ,"Instructions", JOptionPane.INFORMATION_MESSAGE);
+        //set filepath
+        String filePath = new File("").getAbsolutePath();
+        String file_name = filePath.concat("/info.txt");
+
+        //get highscore from file
+        try {
+            ReadFile file = new ReadFile(file_name);
+            String[] aryLines = file.OpenFile();
+            
+            play_check = aryLines[1];
+        }
+
+        catch (IOException e){
+            System.out.println( e.getMessage() );
+        }
+        
+        if ("no".equals(play_check)){
+            JOptionPane.showMessageDialog(null, "How To Play:\nUse The Arrow Keys To Move\nPress Space To Jump\nWhen EMP Bar Is Full, Press The Up Arrow Key To Clear The Field\nShoot Down The Bombs To Get Points\nDon't Let The Bombs Hit The Ground Or Else You Will Lose A Life\nAvoid The Spikes Or Else You Will Lose A Life\nPress The 'P' Button To Pause\nYou Have Three Lives, Good Luck" ,"Instructions", JOptionPane.INFORMATION_MESSAGE);
+        }
         retro.go();
     }
     
@@ -40,52 +61,53 @@ public class Retro extends JFrame implements KeyListener{
                 System.out.println( interruptedexception.getMessage() );
             }
             update(getGraphics());
-        } while(!panel.gameover);
-        
-        if (panel.gameover){
-            //set filepath
-            String filePath = new File("").getAbsolutePath();
-            String file_name = filePath.concat("/highs.txt");
-            
-            //get highscore from file
-            try {
-                ReadFile file = new ReadFile(file_name);
-                String[] aryLines = file.OpenFile();
+            if (panel.gameover){
+                //set filepath
+                String filePath = new File("").getAbsolutePath();
+                String file_name = filePath.concat("/info.txt");
 
-                high = Integer.parseInt(aryLines[0]);
-                //compares highscore to current score
-                if (panel.score>high){
-                    high=panel.score;
-                    nhigh=true;
+                //get highscore from file
+                try {
+                    ReadFile file = new ReadFile(file_name);
+                    String[] aryLines = file.OpenFile();
+
+                    high = Integer.parseInt(aryLines[0]);
+                    //compares highscore to current score
+                    if (panel.score>high){
+                        high=panel.score;
+                        nhigh=true;
+                    }
+                    //writes the highscore to file, whether new or old
+                    String hs = String.format("%s", high);
+
+
+                    WriteFile data = new WriteFile(file_name, true);
+                    data.writeToFile(hs+"\nyes");
+
                 }
-                //writes the highscore to file, whether new or old
-                String hs = String.format("%s", high);
 
+                catch (IOException e){
+                    System.out.println( e.getMessage() );
+                }
 
-                WriteFile data = new WriteFile(file_name, true);
-                data.writeToFile(hs);
-
+                int fscore=panel.score;
+                JOptionPane.showMessageDialog(null, "Your Final Score Was: "+fscore, "Score", JOptionPane.INFORMATION_MESSAGE);
+                if (!nhigh)
+                JOptionPane.showMessageDialog(null, "High Score: "+high, "High Score", JOptionPane.INFORMATION_MESSAGE);
+                if (nhigh)
+                JOptionPane.showMessageDialog(null, "You Got a New High Score of: "+high, "New High Score", JOptionPane.INFORMATION_MESSAGE);
+                int resp=
+                        JOptionPane.showConfirmDialog(null, "Play Again?", "Play Again?", JOptionPane.YES_NO_OPTION);
+                if (resp == JOptionPane.YES_OPTION){
+                    panel.reset = true;
+                }
+                else {
+                    
+                    System.exit(0);
+                }
             }
-            
-            catch (IOException e){
-                System.out.println( e.getMessage() );
-            }
-            
-            try {
-                Thread.sleep(100L);
-            }
-            
-            catch(InterruptedException interruptedexception) {
-                System.out.println( interruptedexception.getMessage() );
-            }
-            
-            int fscore=panel.score;
-            JOptionPane.showMessageDialog(null, "Your Final Score Was: "+fscore, "Score", JOptionPane.INFORMATION_MESSAGE);
-            if (!nhigh)
-            JOptionPane.showMessageDialog(null, "Highscore: "+high, "Highscore", JOptionPane.INFORMATION_MESSAGE);
-            if (nhigh)
-            JOptionPane.showMessageDialog(null, "You Got a New Highscore of: "+high, "New Highscore", JOptionPane.INFORMATION_MESSAGE);
-        }
+        } while(true);
+        
     }
 
     public void keyPressed(KeyEvent ke) {

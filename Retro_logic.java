@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 public class Retro_logic extends JPanel {
     //initial class called to set up variables
     public Retro_logic(){
+        reset = false;
         start = false;
         left = false;
         right = false;
@@ -82,6 +83,55 @@ public class Retro_logic extends JPanel {
     }
     //graphics public void
     public void paintComponent(Graphics g) {
+        if (reset){
+            start = false;
+            left = false;
+            right = false;
+            space = true;
+            spacepress = false;
+            pause = false;
+            spikeshow = false;
+            emp = false;
+            empactivate = false;
+            gameover = false;
+            pmes = "Start";
+            empusesec = 0;
+            empbar = 0;
+            empsec = 0;
+            charxpos = 285;
+            charypos = 410;
+            bulspawnsec = 1;
+            changecolorsec = 1;
+            bombspawnsec = 1;
+            score = 0;
+            spikemove = 6;
+            jumpsec = 0;
+            jumppos = 0;
+            lives = 3;
+            bombsshowarray = new boolean[55];
+            for (int i = 0; i<55;i++){bombsshowarray[i] = false;}
+            bulshowarray = new boolean[20];
+            for (int i = 0; i<20;i++){bombsshowarray[i] = false;}
+            bombsxposarray = new int[55];
+            for (int i = 0; i<55;i++){bombsxposarray[i] = -50;}
+            bombsyposarray = new int[55];
+            for (int i = 0; i<55;i++){bombsyposarray[i] = -50;}
+            bulxposarray = new int[20];
+            for (int i = 0; i<20;i++){bulxposarray[i] = -50;}
+            bulyposarray = new int[20];
+            for (int i = 0; i<20;i++){bulyposarray[i] = -50;}
+            rainbowcolor = new int[20];
+            for (int i = 0; i<20;i++){rainbowcolor[i] = 1;}
+            spikexpos = new int[3];
+            spikexpos[0]=-44;
+            spikexpos[1]=-27;
+            spikexpos[2]=-10;
+            spikeypos = new int[3];
+            spikeypos[0]=440;
+            spikeypos[1]=410;
+            spikeypos[2]=440;
+            reset = false;
+        }
         super.paintComponent(g);
         //draw bottom
         g.setColor(Color.GREEN);
@@ -111,6 +161,14 @@ public class Retro_logic extends JPanel {
         
         //if emp bar is full, show string emp ready
         if (emp){
+            Random red = new Random();
+            int red1 = 1 + red.nextInt(160);
+            Random blue = new Random();
+            int blue1 = 1 + blue.nextInt(160);
+            Random green = new Random();
+            int green1 = 1 + green.nextInt(160);
+            g.setColor(new Color(red1,green1,blue1));
+            g.fillRect(281, 453, 101, 14);
             g.setColor(Color.WHITE);
             g.drawString("EMP Ready!", 297, 464);
         }
@@ -437,5 +495,5 @@ public class Retro_logic extends JPanel {
     boolean emp;
     boolean empactivate;
     boolean gameover;
-    
+    boolean reset = true;
 }
