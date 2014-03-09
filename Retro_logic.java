@@ -105,7 +105,7 @@ public class Retro_logic extends JPanel {
             bulspawnsec = 1;
             changecolorsec = 1;
             bombspawnsec = 1;
-            score = 75;
+            score = 0;
             spikemove = 6;
             jumpsec = 0;
             jumppos = 0;
