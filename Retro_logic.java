@@ -341,7 +341,7 @@ public class Retro_logic extends JPanel {
             }
             
             //check if enough time has passed for new bomb
-            if (bombspawnsec<20-bombspawnlev){
+            if (bombspawnsec<20-(bombspawnlev*2)){
                 bombspawnsec++;
             }
             
@@ -453,7 +453,7 @@ public class Retro_logic extends JPanel {
                 }
                 empusesec++;
             }
-            if (levelscore>=75 && score!=0 && bombspawnlev<10){
+            if (levelscore>=75 && score!=0 && bombspawnlev<7){
                 bombspawnlev++;
                 empbarfillspeed++;
                 levelscore-=75;
