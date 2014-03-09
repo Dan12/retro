@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 public class Retro_logic extends JPanel {
     //initial class called to set up variables
     public Retro_logic(){
+        levelup = false;
         reset = false;
         start = false;
         left = false;
@@ -24,7 +25,6 @@ public class Retro_logic extends JPanel {
         pmes = "Start";
         empusesec = 0;
         empbar = 0;
-        empsec = 0;
         charxpos = 285;
         charypos = 410;
         bulspawnsec = 1;
@@ -35,6 +35,8 @@ public class Retro_logic extends JPanel {
         jumpsec = 0;
         jumppos = 0;
         lives = 3;
+        bombspawnlev = 0;
+        empbarfillspeed = 1;
         
         bombsshowarray = new boolean[55];
         for (int i = 0; i<55;i++){
@@ -97,13 +99,12 @@ public class Retro_logic extends JPanel {
             pmes = "Start";
             empusesec = 0;
             empbar = 0;
-            empsec = 0;
             charxpos = 285;
             charypos = 410;
             bulspawnsec = 1;
             changecolorsec = 1;
             bombspawnsec = 1;
-            score = 0;
+            score = 75;
             spikemove = 6;
             jumpsec = 0;
             jumppos = 0;
@@ -145,13 +146,16 @@ public class Retro_logic extends JPanel {
         String livestr = String.format("%s", lives);
         g.drawString("Score: ",20, 464);
         g.drawString(scorestr, 64, 464);
+        String levstr = String.format("%s", empbarfillspeed);
+        g.drawString("Level ",90, 464);
+        g.drawString(levstr, 130, 464);
         g.drawString("Lives: ",500, 464);
         g.drawString(livestr, 544, 464);
         g.drawString("EMP Bar:", 220, 464);
         g.setColor(Color.BLACK);
         g.fillRect(280, 452, 103, 16);
         g.setColor(Color.BLUE);
-        g.fillRect(281, 453, empbar, 14);
+        g.fillRect(281, 453, (int) Math.round(empbar), 14);
         
         //if lives are less than or equal to zero, set gameover to true
         if (lives<=0){
@@ -334,7 +338,7 @@ public class Retro_logic extends JPanel {
             }
             
             //check if enough time has passed for new bomb
-            if (bombspawnsec<20){
+            if (bombspawnsec<20-bombspawnlev){
                 bombspawnsec++;
             }
             
@@ -399,11 +403,9 @@ public class Retro_logic extends JPanel {
             
             //if emp not loaded, load it
             if (!emp){
-                empsec++;
+                empbar += (float) (0.1/empbarfillspeed);
             }
             
-            //set value empbar
-            empbar = (int) Math.round(empsec*.1);
             if (empbar>=100){
                 emp = true;
             }
@@ -414,7 +416,6 @@ public class Retro_logic extends JPanel {
                 emp=false;
                 empactivate=false;
                 empbar = 0;
-                empsec = 0;
             }
             
             //if emp active, create blue sphere and flash and reset field
@@ -448,6 +449,14 @@ public class Retro_logic extends JPanel {
                 }
                 empusesec++;
             }
+            if (score%75==0 && !levelup && score!=0){
+                bombspawnlev++;
+                empbarfillspeed++;
+                levelup=true;
+            }
+            if (score%75!=0 && levelup){
+                levelup=false;
+            }
         }
         
         //if gameover, display gameover message and score
@@ -471,9 +480,10 @@ public class Retro_logic extends JPanel {
     int spikemove;
     int jumpsec;
     int lives;
-    int empsec;
-    int empbar;
+    float empbar;
     int empusesec;
+    int bombspawnlev;
+    int empbarfillspeed;
     float jumppos;
     int spikexpos[];
     int spikeypos[];
@@ -495,5 +505,6 @@ public class Retro_logic extends JPanel {
     boolean emp;
     boolean empactivate;
     boolean gameover;
-    boolean reset = true;
+    boolean reset;
+    boolean levelup;
 }
