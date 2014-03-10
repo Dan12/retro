@@ -283,24 +283,47 @@ public class Retro_logic extends JPanel {
         g.setColor(Color.BLACK);
         g.fillRect(charxpos+10, charypos-8, 10, 8);
         
-        //set initial and pause message
-        if (!start && !gameover){
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-            if ("Start".equals(pmes)){
-                g.drawString("Press Enter Key To "+pmes, 80, 240);
-            }
-            else{
-                g.drawString("Press Enter Key To "+pmes, 40, 240);
-            }
-        }
-        
         //if p button pressed, pause game
         if (pause) {
             start = false;
             pmes = "Resume";
             pause = false;
         }
+        
+        //if emp active, create blue sphere and flash and reset field
+            if (emp && empactivate && empusesec<=60){
+                if (empusesec<20){
+                    g.setColor(new Color(0,0,255,100));
+                    g.fillOval((charxpos+15)-empusesec*40, (charypos+15)-empusesec*40, empusesec*80, empusesec*80);
+                }
+                if (empusesec==20){
+                    spikeshow=false;
+                    spikexpos[0]=-44;
+                    spikexpos[1]=-27;
+                    spikexpos[2]=-10;
+                    for (int i = 0; i<20; i++){
+                        bulshowarray[i]=false;
+                        bulxposarray[i] = -50;
+                        bulyposarray[i] = -50;
+                    }
+                    for (int i = 0; i<55; i++){
+                        if (bombsshowarray[i]){
+                            score++;
+                            levelscore++;
+                        }
+                        bombsshowarray[i]=false;
+                        bombsxposarray[i] = -50;
+                        bombsyposarray[i] = -50;
+                    }
+                }
+                if (empusesec>=20){
+                    g.setColor(new Color(255,255,255,255-((empusesec-20)*6)));
+                    g.fillRect(0,0,600,600);
+                }
+                if (start){
+                    empusesec++;
+                }
+            }
         
         //if game is going on
         if (start){
@@ -420,45 +443,24 @@ public class Retro_logic extends JPanel {
                 empactivate=false;
                 empbar = 0;
             }
-            
-            //if emp active, create blue sphere and flash and reset field
-            if (emp && empactivate && empusesec<=60){
-                if (empusesec<20){
-                    g.setColor(new Color(0,0,255,100));
-                    g.fillOval((charxpos+15)-empusesec*40, (charypos+15)-empusesec*40, empusesec*80, empusesec*80);
-                }
-                if (empusesec==20){
-                    spikeshow=false;
-                    spikexpos[0]=-44;
-                    spikexpos[1]=-27;
-                    spikexpos[2]=-10;
-                    for (int i = 0; i<20; i++){
-                        bulshowarray[i]=false;
-                        bulxposarray[i] = -50;
-                        bulyposarray[i] = -50;
-                    }
-                    for (int i = 0; i<55; i++){
-                        if (bombsshowarray[i]){
-                            score++;
-                            levelscore++;
-                        }
-                        bombsshowarray[i]=false;
-                        bombsxposarray[i] = -50;
-                        bombsyposarray[i] = -50;
-                    }
-                }
-                if (empusesec>=20){
-                    g.setColor(new Color(255,255,255,255-((empusesec-20)*6)));
-                    g.fillRect(0,0,600,600);
-                }
-                empusesec++;
-            }
             if (levelscore>=75 && score!=0 && bombspawnlev<7){
                 bombspawnlev++;
                 empbarfillspeed++;
                 levelscore-=75;
             }
         }
+        
+        //set initial and pause message
+        if (!start && !gameover){
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+            if ("Start".equals(pmes)){
+                g.drawString("Press Enter Key To "+pmes, 80, 240);
+            }
+            else{
+                g.drawString("Press Enter Key To "+pmes, 40, 240);
+            }
+        } 
         
         //if gameover, display gameover message and score
         if (gameover){

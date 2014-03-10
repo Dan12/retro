@@ -46,7 +46,7 @@ public class Retro extends JFrame implements KeyListener{
         }
         
         if ("no".equals(play_check)){
-            JOptionPane.showMessageDialog(null, "How To Play:\nUse The Arrow Keys To Move\nPress Space To Jump\nWhen EMP Bar Is Full, Press The Up Arrow Key To Clear The Field\nShoot Down The Bombs To Get Points\nDon't Let The Bombs Hit The Ground Or Else You Will Lose A Life\nAvoid The Spikes Or Else You Will Lose A Life\nPress The 'P' Button To Pause\nYou Have Three Lives, Good Luck" ,"Instructions", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "How To Play:\nUse The Arrow Keys To Move\nPress Space To Jump\nWhen EMP Bar Is Full, Press The Up Arrow Key To Clear The Field\nShoot Down The Bombs To Get Points\nDon't Let The Bombs Hit The Ground Or Else You Will Lose A Life\nAvoid The Spikes Or Else You Will Lose A Life\nPress The 'V' Button To Pause\nYou Have Three Lives, Good Luck" ,"Instructions", JOptionPane.INFORMATION_MESSAGE);
         }
         retro.go();
     }
@@ -55,12 +55,13 @@ public class Retro extends JFrame implements KeyListener{
         //updates graphics several times a second while game is in play
         do {
             try {
-                Thread.sleep(20L);
+                Thread.sleep(20);
             }
             catch(InterruptedException interruptedexception) { 
                 System.out.println( interruptedexception.getMessage() );
             }
-            update(getGraphics());
+            repaint();
+            //update(getGraphics());
             if (panel.gameover){
                 //set filepath
                 String filePath = new File("").getAbsolutePath();
@@ -121,7 +122,7 @@ public class Retro extends JFrame implements KeyListener{
             case 10://enter key
                 panel.start = true;
                 break;
-            case 80://'p' key
+            case 86://'v' key
                 panel.pause = true;
                 break;
             case 32://spacebar
