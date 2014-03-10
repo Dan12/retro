@@ -101,6 +101,7 @@ public class Retro extends JFrame implements KeyListener{
                         JOptionPane.showConfirmDialog(null, "Play Again?", "Play Again?", JOptionPane.YES_NO_OPTION);
                 if (resp == JOptionPane.YES_OPTION){
                     panel.reset = true;
+                    panel.gameover = false;
                 }
                 else {
                     
@@ -126,7 +127,9 @@ public class Retro extends JFrame implements KeyListener{
                 panel.pause = true;
                 break;
             case 32://spacebar
-                panel.spacepress = true;
+                if (panel.start){
+                    panel.spacepress = true;
+                }
                 break;
             case 38://up arrow key
                 panel.empactivate = true;
